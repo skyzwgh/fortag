@@ -4,7 +4,7 @@ WidgetMetadata = {
     description: "搜索·标签·分类·推荐·预告·作者",
     author: "廿二日",
     site: "https://hanime1.me",
-    version: "2.0.2",
+    version: "2.2.1",
     requiredVersion: "0.0.2",
     detailCacheDuration: 300,
     search: {
@@ -304,7 +304,7 @@ WidgetMetadata = {
                     title: "情境场所",
                     type: "enumeration",
                     value: "校園",
-                    enumOptions: [{title:"校園",value:"校園"}, {title:"教室",value:"教室"}, {title:"圖書館",value:"圖書館"}, {title:"保健室",value:"保健室"}, {title:"游泳池",value:"游泳池"}, {title:"愛情賓館",value:"愛情賓館"}, {title:"醫院",value:"醫院"}, {title:"辦公室",value:"辦公室"}, {title:"浴室",value:"浴室"}, {title:"窗邊",value:"窗邊"}, {title:"公共廁所",value:"公共廁所"}, {title:"公眾場合",value:"公眾場合"}, {title:"戶外野戰",value:"戶外野戰"}, {title:"電車",value:"電車"}, {title:"車震",value:"車震"}, {title:"遊艇",value:"遊艇"}, {title:"露營帳篷",value:"露營帳篷"}, {title:"電影院",value:"電影院"}, {title:"健身房",value:"健身房"}, {title:"沙灘",value:"沙灘"}, {title:"溫泉",value:"溫泉"}, {title:"夜店",value:"夜店"}, {title:"監獄",value:"監獄"}, {title:"教堂",value:"教堂"}]
+                    enumOptions: [{title:"校園",value:"校園"}, {title:"教室",value:"教室"}, {title:"圖書館",value:"圖書館"}, {title:"保健室",value:"保健室"}, {title:"游泳池",value:"游泳池"}, {title:"愛情賓館",value:"愛情賓館"}, {title:"醫院",value:"醫院"}, {title:"辦公室",value:"辦公室"}, {title:"浴室",value:"浴室"}, {title:"窗邊",value:"窗邊"}, {title:"公共廁所",value:"公共廁所"}, {title:"公眾場合",value:"公眾场合"}, {title:"戶外野戰",value:"戶外野戰"}, {title:"電車",value:"電車"}, {title:"車震",value:"車震"}, {title:"遊艇",value:"遊艇"}, {title:"露營帳篷",value:"露營帳篷"}, {title:"電影院",value:"電影院"}, {title:"健身房",value:"健身房"}, {title:"沙灘",value:"沙灘"}, {title:"溫泉",value:"溫泉"}, {title:"夜店",value:"夜店"}, {title:"監獄",value:"監獄"}, {title:"教堂",value:"教堂"}]
                 },
                 { name: "page", title: "页码", type: "page", value: "1" }
             ]
@@ -356,7 +356,7 @@ const S2T_MAP = {
     "同人作品": "同人作品", "断面图": "斷面圖", "动态": "動態", "动画": "動畫",
     "里番": "裏番", "泡面番": "泡麵番",
     "师生": "師生", "情侣": "情侶", "青梅竹马": "青梅竹馬", "处女": "處女",
-    "御姐": "御姐", "熟女": "熟女", "女教师": "女教師", "男教师": "男教師",
+    "御姐": "御姐", "熟女": "熟女", "女教师": "女教師", "男教师": "男教师",
     "女医生": "女醫生", "女病人": "女病人", "护士": "護士", "女警": "女警",
     "女仆": "女僕", "魔女": "魔女", "风俗娘": "風俗娘", "女战士": "女戰士",
     "女骑士": "女騎士", "异种族": "異種族", "妖精": "妖精", "魔物娘": "魔物娘",
@@ -501,9 +501,38 @@ function extractCardData($card, seen) {
 
 function buildCards($) {
     const cards = [];
-    $('.home-rows-videos-div').each((_, el) => cards.push($(el).parent('a')));
-    $('.related-watch-wrap').each((_, el) => cards.push($(el)));
-    $('div.video-item-container').each((_, el) => cards.push($(el)));
+    const seen = new Set();
+
+    $('a[href*="/watch?v="]').each((_, el) => {
+        const $a = $(el);
+        if (!$a.find('.home-rows-videos-div').length &&
+            !$a.find('.home-rows-videos-title').length &&
+            !$a.find('.card-mobile-title').length &&
+            !$a.hasClass('overlay') &&
+            !$a.find('img').length) return;
+        const href = $a.attr('href') || '';
+        if (seen.has(href)) return;
+        seen.add(href);
+        cards.push($a);
+    });
+
+    $('.related-watch-wrap').each((_, el) => {
+        const $el = $(el);
+        if ($el.closest('#playlist-scroll').length) return;
+        const href = $el.find('a.overlay').attr('href') || '';
+        if (seen.has(href)) return;
+        seen.add(href);
+        cards.push($el);
+    });
+
+    $('div.video-item-container').each((_, el) => {
+        const $el = $(el);
+        const href = $el.find('a.video-link').attr('href') || '';
+        if (seen.has(href)) return;
+        seen.add(href);
+        cards.push($el);
+    });
+
     return cards;
 }
 
@@ -574,14 +603,12 @@ function parseListHtmlSearch(html) {
         if (!data) return;
         const { link, title, poster, durationText, releaseDate } = data;
         const normUrl = normalizeImageUrl(poster);
-        const posterPath = normUrl || undefined;
-        const backdropPath = normUrl || undefined;
         items.push({
             id: link,
             type: "url",
             title: convertToTraditional(title),
-            posterPath,
-            backdropPath,
+            posterPath: normUrl || undefined,
+            backdropPath: normUrl || undefined,
             durationText,
             releaseDate,
             link,
@@ -676,8 +703,35 @@ function appendTagsToQuery(params, queryParts) {
     });
 }
 
+async function handleJumpUrl(params, page) {
+    const jumpUrl = (params.genreId || params.peopleId || "").toString();
+    if (!jumpUrl || !jumpUrl.startsWith('http')) return null;
+
+    let targetUrl = jumpUrl;
+    if (page > 1) {
+        const sep = jumpUrl.includes('?') ? '&' : '?';
+        targetUrl = jumpUrl + sep + `page=${page}`;
+    }
+
+    let parser = parseListHtml;
+
+    if (jumpUrl.includes('%23')) {
+        parser = parseListHtml; 
+    } else if (jumpUrl.includes('%E8%A3%8F%E7%95%AA') || jumpUrl.includes('%E6%B3%A1%E9%BA%B5%E7%95%AA')) {
+        parser = parseListHtmlPortrait;
+    } else {
+        parser = parseListHtml; 
+    }
+
+    return fetchAndParse(targetUrl, BASE_URL + '/', parser);
+}
+
 async function searchVideos(params) {
     const page = parseInt(params.page) || 1;
+
+    const jumped = await handleJumpUrl(params, page);
+    if (jumped) return jumped;
+
     const rawKeyword = params.keyword || "";
     const sort = mapSortToApi(params.sort_by || 'all');
     const queryParts = [];
@@ -691,11 +745,15 @@ async function searchVideos(params) {
     const referer = page > 1
         ? buildSiteUrl('/search', queryParts.map(p => p.startsWith('page=') ? `page=${page - 1}` : p))
         : BASE_URL + '/';
+        
     return fetchAndParse(url, referer, parseListHtmlSearch);
 }
 
 async function loadAdvancedGenre(params) {
     const page = parseInt(params.page) || 1;
+    const jumped = await handleJumpUrl(params, page);
+    if (jumped) return jumped;
+
     const genre = mapGenreToApi(params.genre);
     const sort = mapSortToApi(params.sort_by || "all");
     const time = mapTimeToApi(params.upload_time);
@@ -720,6 +778,8 @@ async function loadAdvancedGenre(params) {
 
 async function loadHotRankings(params) {
     const page = parseInt(params.page) || 1;
+    const jumped = await handleJumpUrl(params, page);
+    if (jumped) return jumped;
     const sortVal = mapSortToApi(params.sort_by || "watching") || "他們在看";
     const queryParts = [];
 
@@ -750,13 +810,13 @@ function buildTagModuleUrl(params) {
     return { url, referer };
 }
 
-async function loadByTagAttr(params) { const { url, referer } = buildTagModuleUrl(params); return fetchAndParse(url, referer); }
-async function loadByTagRel(params) { const { url, referer } = buildTagModuleUrl(params); return fetchAndParse(url, referer); }
-async function loadByTagRole(params) { const { url, referer } = buildTagModuleUrl(params); return fetchAndParse(url, referer); }
-async function loadByTagBody(params) { const { url, referer } = buildTagModuleUrl(params); return fetchAndParse(url, referer); }
-async function loadByTagLoc(params) { const { url, referer } = buildTagModuleUrl(params); return fetchAndParse(url, referer); }
-async function loadByTagPlot(params) { const { url, referer } = buildTagModuleUrl(params); return fetchAndParse(url, referer); }
-async function loadByTagPos(params) { const { url, referer } = buildTagModuleUrl(params); return fetchAndParse(url, referer); }
+async function loadByTagAttr(params) { const page = parseInt(params.page)||1; const j = await handleJumpUrl(params,page); if(j) return j; const { url, referer } = buildTagModuleUrl(params); return fetchAndParse(url, referer); }
+async function loadByTagRel(params)  { const page = parseInt(params.page)||1; const j = await handleJumpUrl(params,page); if(j) return j; const { url, referer } = buildTagModuleUrl(params); return fetchAndParse(url, referer); }
+async function loadByTagRole(params) { const page = parseInt(params.page)||1; const j = await handleJumpUrl(params,page); if(j) return j; const { url, referer } = buildTagModuleUrl(params); return fetchAndParse(url, referer); }
+async function loadByTagBody(params) { const page = parseInt(params.page)||1; const j = await handleJumpUrl(params,page); if(j) return j; const { url, referer } = buildTagModuleUrl(params); return fetchAndParse(url, referer); }
+async function loadByTagLoc(params)  { const page = parseInt(params.page)||1; const j = await handleJumpUrl(params,page); if(j) return j; const { url, referer } = buildTagModuleUrl(params); return fetchAndParse(url, referer); }
+async function loadByTagPlot(params) { const page = parseInt(params.page)||1; const j = await handleJumpUrl(params,page); if(j) return j; const { url, referer } = buildTagModuleUrl(params); return fetchAndParse(url, referer); }
+async function loadByTagPos(params)  { const page = parseInt(params.page)||1; const j = await handleJumpUrl(params,page); if(j) return j; const { url, referer } = buildTagModuleUrl(params); return fetchAndParse(url, referer); }
 
 async function loadDetail(link) {
     try {
@@ -816,18 +876,29 @@ async function loadDetail(link) {
 
         const genreItems = [];
         $('.single-video-tag a').each((_, el) => {
-            const tagText = $(el).text().replace(/\(\d+\)/g, '').replace(/&nbsp;/g, '').trim();
-            if (tagText && tagText !== 'add' && tagText !== 'remove') {
-                genreItems.push({ id: tagText, title: convertToTraditional(tagText) });
-            }
+            const $a = $(el);
+            const tagText = $a.text().replace(/\(\d+\)/g, '').replace(/&nbsp;/g, '').trim();
+            if (!tagText || tagText === 'add' || tagText === 'remove') return;
+            let href = ($a.attr('href') || '').replace(/&amp;/g, '&');
+            if (!href) return;
+            
+            href = href.replace(/[^\x00-\x7F]/g, c => encodeURIComponent(c));
+            
+            const tagId = href.startsWith('http') ? href : BASE_URL + href;
+            genreItems.push({ id: tagId, title: convertToTraditional(tagText) });
         });
 
         const peoples = [];
         const seenPeoples = new Set();
         $('.video-details-wrapper a[href*="/user/"]').each((_, el) => {
             const $a = $(el);
-            const href = $a.attr('href') || '';
+            let href = $a.attr('href') || '';
             const userId = href.split('/user/')[1]?.split(/[?#]/)[0] || '';
+            if (!userId) return;
+            
+            href = href.replace(/[^\x00-\x7F]/g, c => encodeURIComponent(c));
+            const peopleId = href.startsWith('http') ? href : BASE_URL + href;
+            
             const $imgs = $a.find('img');
             const $realAvatar = $imgs.length >= 2 ? $imgs.eq(1) : $imgs.first();
             const avatar = normalizeImageUrl(
@@ -836,21 +907,28 @@ async function loadDetail(link) {
             const name = convertToTraditional(
                 safeText($realAvatar.attr('alt') || $a.text())
             );
-            if (!name || seenPeoples.has(name)) return;
-            seenPeoples.add(name);
+            if (!name || seenPeoples.has(peopleId)) return;
+            seenPeoples.add(peopleId);
             peoples.push({
-                id: userId || name,
+                id: peopleId,
                 title: name,
                 avatar: avatar || 'https://iili.io/KtHNnQS.png',
             });
         });
+        
         if (!peoples.length) {
-            const artistName = convertToTraditional(safeText($('#video-artist-name').text()));
-            if (artistName) peoples.push({
-                id: artistName,
-                title: artistName,
-                avatar: 'https://iili.io/KtHNnQS.png',
-            });
+            const $artistLink = $('#video-artist-name');
+            const artistName = convertToTraditional(safeText($artistLink.text()));
+            let artistHref = $artistLink.attr('href') || '';
+            if (artistName && artistHref) {
+                artistHref = artistHref.replace(/[^\x00-\x7F]/g, c => encodeURIComponent(c));
+                const artistId = artistHref.startsWith('http') ? artistHref : BASE_URL + artistHref;
+                peoples.push({
+                    id: artistId,
+                    title: artistName,
+                    avatar: 'https://iili.io/KtHNnQS.png',
+                });
+            }
         }
 
         let releaseDate = "";
@@ -885,12 +963,60 @@ async function loadDetail(link) {
         let finalPosterPath = undefined;
         let finalBackdropPath = ogImage || undefined;
 
+        let seriesTitle = '';
+        let seriesItems = [];
+        const $playlistWrapper = $('#video-playlist-wrapper').first();
+        if ($playlistWrapper.length) {
+            seriesTitle = safeText($playlistWrapper.find('.video-playlist-top h4').first().text());
+            const $playlistScroll = $playlistWrapper.find('#playlist-scroll');
+            $playlistScroll.find('.related-watch-wrap.multiple-link-wrapper').each((idx, el) => {
+                const $card = $(el);
+                const href = $card.find('a.overlay').attr('href') || '';
+                const epLink = normalizeWatchUrl(href);
+                if (!epLink || !/\/watch\?v=\d+/.test(epLink)) return;
+
+                const epTitle = safeText($card.find('.card-mobile-title').first().text()) || `第 ${idx + 1} 集`;
+                const $imgs = $card.find('img');
+                const $epImg = $imgs.length >= 2 ? $imgs.eq(1) : $imgs.first();
+                const epPosterRaw = $epImg.attr('data-src') || $epImg.attr('data-original') || $epImg.attr('src') || '';
+                const epCover = normalizeImageUrl(epPosterRaw) || undefined;
+                const durMatch = $card.find('.card-mobile-duration').first().text().match(/\d+:\d{2}/);
+                const epDuration = durMatch ? durMatch[0] : undefined;
+                const vidMatch = epLink.match(/v=(\d+)/);
+                const epIsCurrent = epLink === link;
+
+                seriesItems.push({
+                    id: epLink,
+                    type: 'url',
+                    title: (seriesTitle ? `【${convertToTraditional(seriesTitle)}】` : '【系列】') + convertToTraditional(epTitle),
+                    posterPath: undefined,
+                    backdropPath: epCover,
+                    description: epIsCurrent ? '现正播放' : (epDuration ? `时长: ${epDuration}` : undefined),
+                    mediaType: 'movie',
+                    link: epLink
+                });
+            });
+        }
+        
+        {
+            const seenSeriesLink = new Set();
+            seriesItems = seriesItems.filter(it => {
+                if (seenSeriesLink.has(it.link)) return false;
+                seenSeriesLink.add(it.link);
+                return true;
+            });
+        }
+
         const relatedItems = [];
         const seenRelated = new Set([link]);
+        seriesItems.forEach(it => seenRelated.add(it.link));
 
         const relatedCards = [];
         $('.home-rows-videos-div').each((_, el) => relatedCards.push($(el).parent('a')));
-        $('.related-watch-wrap').each((_, el) => relatedCards.push($(el)));
+        $('.related-watch-wrap').each((_, el) => {
+            if ($(el).closest('#playlist-scroll').length) return;
+            relatedCards.push($(el));
+        });
 
         relatedCards.forEach($card => {
             if (relatedItems.length >= 12) return;
@@ -948,7 +1074,7 @@ async function loadDetail(link) {
             backdropPath: finalBackdropPath,
             mediaType: 'movie',
             link,
-            relatedItems,
+            relatedItems: (seriesItems.length > 0 ? seriesItems.concat(relatedItems) : relatedItems),
             customHeaders: getCommonHeaders(link)
         };
 
