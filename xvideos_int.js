@@ -775,15 +775,15 @@ class WidgetAPI {
             const defaultOptions = await this.getDefaultOptions();
             baseOptions = lodash_es_merge(baseOptions, defaultOptions);
         } catch (error) {
-            console.warn("获取默认配置失败，使用基础配置:", error);
+            console.warn("è·åé»è®¤éç½®å¤±è´¥ï¼ä½¿ç¨åºç¡éç½®:", error);
         }
         const finalOptions = lodash_es_merge(baseOptions, options);
         try {
             const resp = await Widget.http.get(url, finalOptions);
-            if (!resp || 200 !== resp.statusCode) throw new Error(`7}2}1}5}: ${(null == resp ? void 0 : resp.statusCode) || "未知错误"}`);
+            if (!resp || 200 !== resp.statusCode) throw new Error(`7}2}1}5}: ${(null == resp ? void 0 : resp.statusCode) || "æªç¥éè¯¯"}`);
             return resp.data;
         } catch (error) {
-            throw new Error(`1}C}7}2}1}5}: ${error instanceof Error ? error.message : "未知错误"}`);
+            throw new Error(`1}C}7}2}1}5}: ${error instanceof Error ? error.message : "æªç¥éè¯¯"}`);
         }
     }
     async getHtml(url, options) {
@@ -818,29 +818,342 @@ const widgetAPI = new WidgetAPI(async ()=>{
             }
         };
     } catch (error) {
-        console.error("获取默认配置失败，使用基础配置:", error);
+        console.error("è·åé»è®¤éç½®å¤±è´¥ï¼ä½¿ç¨åºç¡éç½®:", error);
         return {};
     }
 });
 WidgetMetadata = {
-    id: 'xvideos_int',
+    id: 'XVideos',
     title: 'XVideos',
-    description: '網路收集到的模塊',
-    version: "0.9.6",
+    description: 'XVideos è§é¢èµæºæµè§æ¨¡åï¼æ¯æææ°ãç­é¨ãåç±»ãæ ç­¾ãé¢éåææç­é',
+    version: "1.0.0",
     requiredVersion: '0.0.1',
-    author: "網路",
-    site: 'https://github.com/baranwang/forward-widget',
-    detailCacheDuration: 1,
+    author: "ç½ç»|EL",
+    site: 'https://www.xvideos.com',
+    detailCacheDuration: 3600,
     modules: [
         {
             id: 'xvideos.new',
-            title: "最新视频",
-            description: "XVideos 最新视频",
+            title: "ææ°",
+            description: "XVideos ææ°è§é¢",
             functionName: 'getNewList',
             params: [
                 {
                     name: 'page',
-                    title: "页码",
+                    title: "é¡µç ",
+                    type: 'page',
+                    value: '0'
+                }
+            ]
+        },
+        {
+            id: 'xvideos.best',
+            title: "ç­é¨",
+            description: "XVideos ç­é¨è§é¢",
+            functionName: 'getBestList',
+            params: [
+                {
+                    name: 'mode',
+                    title: "ç±»å",
+                    type: 'input',
+                    value: 'free',
+                    placeholders: [
+                        { title: 'åè´¹', value: 'free' },
+                        { title: 'REDè§é¢', value: 'red' }
+                    ]
+                },
+                {
+                    name: 'archive',
+                    title: "æä»½",
+                    type: 'input',
+                    value: '2026-04',
+                    placeholders: [
+                        { title: '2026-04', value: '2026-04' },
+                        { title: '2026-03', value: '2026-03' },
+                        { title: '2026-02', value: '2026-02' },
+                        { title: '2026-01', value: '2026-01' },
+                        { title: '2025-12', value: '2025-12' },
+                        { title: '2025-11', value: '2025-11' },
+                        { title: '2025-10', value: '2025-10' },
+                        { title: '2025-09', value: '2025-09' },
+                        { title: '2025-08', value: '2025-08' },
+                        { title: '2025-07', value: '2025-07' },
+                        { title: '2025-06', value: '2025-06' },
+                        { title: '2025-05', value: '2025-05' },
+                        { title: '2025-04', value: '2025-04' },
+                        { title: '2025-03', value: '2025-03' },
+                        { title: '2025-02', value: '2025-02' },
+                        { title: '2025-01', value: '2025-01' },
+                        { title: '2024-12', value: '2024-12' },
+                        { title: '2024-11', value: '2024-11' },
+                        { title: '2024-10', value: '2024-10' },
+                        { title: '2024-09', value: '2024-09' },
+                        { title: '2024-08', value: '2024-08' },
+                        { title: '2024-07', value: '2024-07' },
+                        { title: '2024-06', value: '2024-06' },
+                        { title: '2024-05', value: '2024-05' },
+                        { title: '2024-04', value: '2024-04' },
+                        { title: '2024-03', value: '2024-03' },
+                        { title: '2024-02', value: '2024-02' },
+                        { title: '2024-01', value: '2024-01' },
+                        { title: '2023-12', value: '2023-12' },
+                        { title: '2023-11', value: '2023-11' },
+                        { title: '2023-10', value: '2023-10' },
+                        { title: '2023-09', value: '2023-09' },
+                        { title: '2023-08', value: '2023-08' },
+                        { title: '2023-07', value: '2023-07' },
+                        { title: '2023-06', value: '2023-06' },
+                        { title: '2023-05', value: '2023-05' },
+                        { title: '2023-04', value: '2023-04' },
+                        { title: '2023-03', value: '2023-03' },
+                        { title: '2023-02', value: '2023-02' },
+                        { title: '2023-01', value: '2023-01' },
+                        { title: '2022-12', value: '2022-12' },
+                        { title: '2022-11', value: '2022-11' },
+                        { title: '2022-10', value: '2022-10' },
+                        { title: '2022-09', value: '2022-09' },
+                        { title: '2022-08', value: '2022-08' },
+                        { title: '2022-07', value: '2022-07' },
+                        { title: '2022-06', value: '2022-06' },
+                        { title: '2022-05', value: '2022-05' },
+                        { title: '2022-04', value: '2022-04' },
+                        { title: '2022-03', value: '2022-03' },
+                        { title: '2022-02', value: '2022-02' },
+                        { title: '2022-01', value: '2022-01' },
+                        { title: '2021-12', value: '2021-12' },
+                        { title: '2021-11', value: '2021-11' },
+                        { title: '2021-10', value: '2021-10' },
+                        { title: '2021-09', value: '2021-09' },
+                        { title: '2021-08', value: '2021-08' },
+                        { title: '2021-07', value: '2021-07' },
+                        { title: '2021-06', value: '2021-06' },
+                        { title: '2021-05', value: '2021-05' },
+                        { title: '2021-04', value: '2021-04' },
+                        { title: '2021-03', value: '2021-03' },
+                        { title: '2021-02', value: '2021-02' },
+                        { title: '2021-01', value: '2021-01' },
+                        { title: '2020-12', value: '2020-12' },
+                        { title: '2020-11', value: '2020-11' },
+                        { title: '2020-10', value: '2020-10' },
+                        { title: '2020-09', value: '2020-09' },
+                        { title: '2020-08', value: '2020-08' },
+                        { title: '2020-07', value: '2020-07' },
+                        { title: '2020-06', value: '2020-06' },
+                        { title: '2020-05', value: '2020-05' },
+                        { title: '2020-04', value: '2020-04' },
+                        { title: '2020-03', value: '2020-03' },
+                        { title: '2020-02', value: '2020-02' },
+                        { title: '2020-01', value: '2020-01' },
+                        { title: '2019-12', value: '2019-12' },
+                        { title: '2019-11', value: '2019-11' },
+                        { title: '2019-10', value: '2019-10' },
+                        { title: '2019-09', value: '2019-09' },
+                        { title: '2019-08', value: '2019-08' },
+                        { title: '2019-07', value: '2019-07' },
+                        { title: '2019-06', value: '2019-06' },
+                        { title: '2019-05', value: '2019-05' },
+                        { title: '2019-04', value: '2019-04' },
+                        { title: '2019-03', value: '2019-03' },
+                        { title: '2019-02', value: '2019-02' },
+                        { title: '2019-01', value: '2019-01' },
+                        { title: '2018-12', value: '2018-12' },
+                        { title: '2018-11', value: '2018-11' },
+                        { title: '2018-10', value: '2018-10' },
+                        { title: '2018-09', value: '2018-09' },
+                        { title: '2018-08', value: '2018-08' },
+                        { title: '2018-07', value: '2018-07' },
+                        { title: '2018-06', value: '2018-06' },
+                        { title: '2018-05', value: '2018-05' },
+                        { title: '2018-04', value: '2018-04' },
+                        { title: '2018-03', value: '2018-03' },
+                        { title: '2018-02', value: '2018-02' },
+                        { title: '2018-01', value: '2018-01' },
+                        { title: '2017-12', value: '2017-12' },
+                        { title: '2017-11', value: '2017-11' },
+                        { title: '2017-10', value: '2017-10' },
+                        { title: '2017-09', value: '2017-09' },
+                        { title: '2017-08', value: '2017-08' },
+                        { title: '2017-07', value: '2017-07' },
+                        { title: '2017-06', value: '2017-06' },
+                        { title: '2017-05', value: '2017-05' },
+                        { title: '2017-04', value: '2017-04' },
+                        { title: '2017-03', value: '2017-03' },
+                        { title: '2017-02', value: '2017-02' },
+                        { title: '2017-01', value: '2017-01' },
+                        { title: '2016-12', value: '2016-12' },
+                        { title: '2016-11', value: '2016-11' },
+                        { title: '2016-10', value: '2016-10' },
+                        { title: '2016-09', value: '2016-09' },
+                        { title: '2016-08', value: '2016-08' },
+                        { title: '2016-07', value: '2016-07' },
+                        { title: '2016-06', value: '2016-06' },
+                        { title: '2016-05', value: '2016-05' },
+                        { title: '2016-04', value: '2016-04' },
+                        { title: '2016-03', value: '2016-03' },
+                        { title: '2016-02', value: '2016-02' },
+                        { title: '2016-01', value: '2016-01' },
+                        { title: '2015-12', value: '2015-12' },
+                        { title: '2015-11', value: '2015-11' },
+                        { title: '2015-10', value: '2015-10' },
+                        { title: '2015-09', value: '2015-09' },
+                        { title: '2015-08', value: '2015-08' },
+                        { title: '2015-07', value: '2015-07' },
+                        { title: '2015-06', value: '2015-06' },
+                        { title: '2015-05', value: '2015-05' },
+                        { title: '2015-04', value: '2015-04' },
+                        { title: '2015-03', value: '2015-03' },
+                        { title: '2015-02', value: '2015-02' },
+                        { title: '2015-01', value: '2015-01' },
+                        { title: '2014-12', value: '2014-12' },
+                        { title: '2014-11', value: '2014-11' },
+                        { title: '2014-10', value: '2014-10' },
+                        { title: '2014-09', value: '2014-09' },
+                        { title: '2014-08', value: '2014-08' },
+                        { title: '2014-07', value: '2014-07' },
+                        { title: '2014-06', value: '2014-06' },
+                        { title: '2014-05', value: '2014-05' },
+                        { title: '2014-04', value: '2014-04' },
+                        { title: '2014-03', value: '2014-03' },
+                        { title: '2014-02', value: '2014-02' },
+                        { title: '2014-01', value: '2014-01' },
+                        { title: '2013-12', value: '2013-12' },
+                        { title: '2013-11', value: '2013-11' },
+                        { title: '2013-10', value: '2013-10' },
+                        { title: '2013-09', value: '2013-09' },
+                        { title: '2013-08', value: '2013-08' },
+                        { title: '2013-07', value: '2013-07' }
+                    ]
+                },
+                {
+                    name: 'page',
+                    title: "é¡µç ",
+                    type: 'page',
+                    value: '0'
+                }
+            ]
+        },
+        {
+            id: 'xvideos.category',
+            title: "åç±»",
+            description: "XVideos åç±»è§é¢",
+            functionName: 'getCategoryList',
+            params: [
+                {
+                    name: 'category',
+                    title: "åç±»",
+                    type: 'input',
+                    value: '',
+                    placeholders: [
+                        { title: 'ä¸­æè²æ', value: 'lang/chinese' },
+                        { title: 'AI', value: 'c/AI-239' },
+                        { title: 'ä¸ä½', value: 'c/Amateur-65' },
+                        { title: 'èäº¤', value: 'c/Anal-12' },
+                        { title: 'é¿æä¼¯', value: 'c/Arab-159' },
+                        { title: 'äºæ´²', value: 'c/Asian_Woman-32' },
+                        { title: 'ASMR', value: 'c/ASMR-229' },
+                        { title: 'èé¨', value: 'c/Ass-14' },
+                        { title: 'åæ§æ', value: 'c/Bi_Sexual-62' },
+                        { title: 'å¤§å±è¡', value: 'c/Big_Ass-24' },
+                        { title: 'å¤§é¸¡å·´', value: 'c/Big_Cock-34' },
+                        { title: 'å¤§è¸', value: 'c/Big_Tits-23' },
+                        { title: 'é»äºº', value: 'c/Black_Woman-30' },
+                        { title: 'éå', value: 'c/Blonde-20' },
+                        { title: 'å£äº¤', value: 'c/Blowjob-15' },
+                        { title: 'é»å', value: 'c/Brunette-25' },
+                        { title: 'æåå¤´è²æ', value: 'c/Cam_Porn-58' },
+                        { title: 'ä¸­åº', value: 'c/Creampie-40' },
+                        { title: 'ç»¿å¸½/ç­å¦»', value: 'c/Cuckold-237' },
+                        { title: 'å°ç²¾', value: 'c/Cumshot-18' },
+                        { title: 'å¥³çè°æ', value: 'c/Femdom-235' },
+                        { title: 'æ³äº¤', value: 'c/Fisting-165' },
+                        { title: 'æ··ä¹±å®¶åº­', value: 'c/Fucked_Up_Family-81' },
+                        { title: 'ç¾¤äº¤', value: 'c/Gangbang-69' },
+                        { title: 'æ©å¼ ', value: 'c/Gapes-167' },
+                        { title: 'è·¨ç§æ', value: 'c/Interracial-27' },
+                        { title: 'æä¸è£', value: 'c/Latina-16' },
+                        { title: 'å¥³åæ§æ', value: 'c/Lesbian-26' },
+                        { title: 'æè¶£åè¡£', value: 'c/Lingerie-83' },
+                        { title: 'çå¥³', value: 'c/Mature-38' },
+                        { title: 'ç¾è³äººå¦»', value: 'c/Milf-19' },
+                        { title: 'æ¶æ²¹', value: 'c/Oiled-22' },
+                        { title: 'çº¢å', value: 'c/Redhead-31' },
+                        { title: 'åäºº/èªæ°', value: 'c/Solo_and_Masturbation-33' },
+                        { title: 'æ½®å·', value: 'c/Squirting-56' },
+                        { title: 'ä¸è¢', value: 'c/Stockings-28' },
+                        { title: 'éå°å¹´', value: 'c/Teen-13' }
+                    ]
+                },
+                {
+                    name: 'page',
+                    title: "é¡µç ",
+                    type: 'page',
+                    value: '0'
+                }
+            ]
+        },
+        {
+            id: 'xvideos.tag',
+            title: "æ ç­¾",
+            description: "XVideos æ ç­¾è§é¢",
+            functionName: 'getTagList',
+            params: [
+                {
+                    name: 'tag',
+                    title: "æ ç­¾",
+                    type: 'input',
+                    value: '',
+                    placeholders: [
+                        { title: 'ä¸ä½', value: 'amateur' },
+                        { title: 'äºæ´²', value: 'asian' },
+                        { title: 'æä½³', value: 'best' },
+                        { title: 'å£äº¤', value: 'blowjob' },
+                        { title: 'æä¾£', value: 'couple' },
+                        { title: 'ä¸­åº', value: 'creampie' },
+                        { title: 'å¥³å­©', value: 'girls' },
+                        { title: 'çå¥³', value: 'milf' },
+                        { title: 'é´é¨', value: 'pussy' },
+                        { title: 'å°å¥³', value: 'teen' },
+                        { title: 'ä¸è¢', value: 'stockings' },
+                        { title: 'å¥³æ§', value: 'woman' },
+                        { title: 'æ¥æ¬', value: 'japanese' },
+                        { title: 'ä¸­æ', value: 'chinese' },
+                        { title: 'æµç¨ åæ³', value: 'creamy' },
+                        { title: 'é¦æ¸¯', value: 'hong-kong' },
+                        { title: 'ä¸­å½', value: 'china' },
+                        { title: 'é©å½', value: 'korea' },
+                        { title: 'æ³°å½', value: 'thai' },
+                        { title: 'è§è²æ®æ¼', value: 'cosplay' },
+                        { title: 'æ¸¸æ', value: 'game' },
+                        { title: 'ASMR', value: 'ASMR-229' },
+                        { title: 'Roblox', value: 'roblox' },
+                        { title: 'çµå½±', value: 'movie' },
+                        { title: 'æ¥æ¬äººå¦»', value: 'japanese-wife' },
+                        { title: 'èäº¤', value: 'anal' },
+                        { title: 'èé¨', value: 'ass' },
+                        { title: 'è¥è', value: 'big-ass' },
+                        { title: 'å¤§è¸', value: 'big-tits' },
+                        { title: 'å¤§é¸¡å·´', value: 'big-cock' },
+                        { title: 'ç´æ­', value: 'cam' },
+                        { title: 'å°ç²¾æ¶å»', value: 'cumshot' },
+                        { title: 'åå¥å¼', value: 'doggystyle' },
+                        { title: 'æ³äº¤', value: 'fisting' },
+                        { title: 'è·¨ç§æ', value: 'interracial' },
+                        { title: 'æè¶£åè¡£', value: 'lingerie' },
+                        { title: 'æ¶æ²¹', value: 'oiled' },
+                        { title: 'çº¢å', value: 'redhead' },
+                        { title: 'æ½®å·', value: 'squirting' },
+                        { title: 'æä¸è£', value: 'latina' },
+                        { title: 'é¿æä¼¯', value: 'arab' },
+                        { title: 'é»äºº', value: 'black' },
+                        { title: 'å¥³ä¸ä½', value: 'femdom' },
+                        { title: 'æ©å¼ ', value: 'gapes' },
+                        { title: 'çå¥³', value: 'mature' },
+                        { title: 'ææ©', value: 'massage' }
+                    ]
+                },
+                {
+                    name: 'page',
+                    title: "é¡µç ",
                     type: 'page',
                     value: '0'
                 }
@@ -848,13 +1161,13 @@ WidgetMetadata = {
         },
         {
             id: 'xvideos.channel',
-            title: "频道",
-            description: "XVideos 频道",
+            title: "é¢é",
+            description: "XVideos é¢é",
             functionName: 'getChannelList',
             params: [
                 {
                     name: 'channel',
-                    title: "频道",
+                    title: "é¢é",
                     type: 'input',
                     value: '',
                     placeholders: [
@@ -863,17 +1176,20 @@ WidgetMetadata = {
                             value: 'asiam'
                         },
                         {
+                            title: 'Vixen',
+                            value: 'vixen-1'
+                        },
+
+                        {
+                            title: 'Tushy',
+                            value: 'tushy_com'
+                        },
+                        {
                             title: 'AV Jiali',
                             value: 'av-jiali'
                         },
-                        {
-                            title: 'Japanesecreampiesystem717',
-                            value: 'japanese_creampie_system717'
-                        },
-                        {
-                            title: 'StockingsCat',
-                            value: 'stockingscat'
-                        },
+
+
                         {
                             title: 'Japan HDV',
                             value: 'japan-hdv'
@@ -890,10 +1206,7 @@ WidgetMetadata = {
                             title: 'Hisidepon',
                             value: 'hisidepon'
                         },
-                        {
-                            title: 'Monmon Tw',
-                            value: 'monmon_tw'
-                        },
+
                         {
                             title: 'MOON FORCE',
                             value: 'moonforce'
@@ -910,10 +1223,7 @@ WidgetMetadata = {
                             title: 'Guodong Media',
                             value: 'guodong_media'
                         },
-                        {
-                            title: 'Aipornmix',
-                            value: 'aipornmix1'
-                        },
+
                         {
                             title: 'YOSUGA',
                             value: 'yosuga'
@@ -946,26 +1256,17 @@ WidgetMetadata = {
                             title: 'NIKSINDIAN',
                             value: 'niks_indian'
                         },
-                        {
-                            title: 'Jimmyreload',
-                            value: 'jimmyreload'
-                        },
+
                         {
                             title: 'S Cute Official',
                             value: 's-cute-official'
                         },
-                        {
-                            title: 'Zenra',
-                            value: 'zenra-subtitled-japanese-av'
-                        },
+
                         {
                             title: 'Japaneserxrx',
                             value: 'japaneserxrx'
                         },
-                        {
-                            title: 'Claire0607018',
-                            value: 'claire0607018'
-                        },
+
                         {
                             title: 'JapBliss',
                             value: 'japbliss'
@@ -983,14 +1284,6 @@ WidgetMetadata = {
                             value: 'av69tv'
                         },
                         {
-                            title: 'Ronysworld',
-                            value: 'ronysworld'
-                        },
-                        {
-                            title: 'Uttaran20',
-                            value: 'uttaran20'
-                        },
-                        {
                             title: 'Jukujosukidesu',
                             value: 'jukujosukidesu'
                         },
@@ -999,124 +1292,124 @@ WidgetMetadata = {
                             value: 'schoolgirlshd'
                         },
                         {
-                            title: 'Psychoporn Tw',
-                            value: 'psychoporn_tw'
+                            title: 'PrivateSociety',
+                            value: 'privatesociety'
                         },
                         {
-                            title: 'Hotxvip',
-                            value: 'hotxvip1'
+                            title: 'Dogfart Network',
+                            value: 'dogfartnetwork'
                         },
                         {
-                            title: 'Kmib',
-                            value: 'k-mib'
+                            title: 'Jav HD',
+                            value: 'javhd'
                         },
                         {
-                            title: 'Javhub',
-                            value: 'javhub'
+                            title: 'PutaLocura Oficial',
+                            value: 'putalocura_oficial'
                         },
                         {
-                            title: 'DirectorTONG',
-                            value: 'directortong1'
+                            title: 'Net Video Girls',
+                            value: 'netvideogirls'
                         },
                         {
-                            title: 'Toptenxx',
-                            value: 'top_tenxxx'
+                            title: 'Japan HDV',
+                            value: 'japan-hdv'
                         },
                         {
-                            title: 'Kimberlisah',
-                            value: 'rapliandae'
+                            title: 'Sara Jay',
+                            value: 'sara-jay'
                         },
                         {
-                            title: 'Xx66689',
-                            value: 'xx66689'
+                            title: 'Caribbeancom',
+                            value: 'caribbeancom'
                         },
                         {
-                            title: 'Indigosin',
-                            value: 'indigo_sin'
+                            title: 'Pervcity',
+                            value: 'pervcity'
                         },
                         {
-                            title: 'HEYZO',
-                            value: 'heyzo-xxx'
+                            title: 'MadeInCanarias',
+                            value: 'madeincanarias'
                         },
                         {
-                            title: 'Elle Lee Official',
-                            value: 'elle_lee_official'
+                            title: 'BangBros 18',
+                            value: 'bangbros-18'
                         },
                         {
-                            title: 'MAX-Japanese',
-                            value: 'max-japanese'
+                            title: 'Exposed Latinas',
+                            value: 'exposedlatinas'
                         },
                         {
-                            title: 'Kninebox',
-                            value: 'kninebox'
+                            title: 'Oldje',
+                            value: 'cindyca'
                         },
                         {
-                            title: 'HotyNitu',
-                            value: 'villagefuke1_official'
+                            title: 'New Sensations',
+                            value: 'newsensations'
                         },
                         {
-                            title: 'Ferame',
-                            value: 'ferame'
+                            title: 'CamSoda',
+                            value: 'camsoda'
                         },
                         {
-                            title: 'Babeneso',
-                            value: 'babeneso'
+                            title: 'Moms Teach Sex',
+                            value: 'momsteachsex'
                         },
                         {
-                            title: 'Yellowgamesbyjason',
-                            value: 'yellow_games_by_jason'
+                            title: 'Primal Fetish',
+                            value: 'primalfetish'
                         },
                         {
-                            title: 'Creampiedaily',
-                            value: 'creampiedaily'
+                            title: 'Backroom Casting Couch',
+                            value: 'backroomcastingcouch'
                         },
                         {
-                            title: 'YellowPlum',
-                            value: 'yellowplum'
+                            title: 'Mandy Flores',
+                            value: 'mandy-flores'
                         },
                         {
-                            title: 'Pikkur.com',
-                            value: 'pikkurcom'
+                            title: 'Step Siblings Caught',
+                            value: 'step-siblings-caught'
                         },
                         {
-                            title: 'Hotxcreator',
-                            value: 'hotxcreator'
+                            title: 'Digital Playground',
+                            value: 'digital-playground'
                         },
                         {
-                            title: 'Kopihitamenak',
-                            value: 'kopihitamenak'
+                            title: 'ShopLyfter',
+                            value: 'shoplyfter'
                         },
                         {
-                            title: 'Mistress Land',
-                            value: 'mistressland'
+                            title: '21Naturals',
+                            value: '21naturals'
                         },
                         {
-                            title: 'Gogouncensored',
-                            value: 'gogouncensored'
+                            title: 'Perv Mom',
+                            value: 'perv-mom'
                         },
                         {
-                            title: 'AV Tits',
-                            value: 'avtits'
+                            title: 'Sis Loves Me',
+                            value: 'sis-loves-me'
                         },
                         {
-                            title: 'Peach Japan',
-                            value: 'peach_japan'
+                            title: 'Fake Hub',
+                            value: 'fake-hub'
                         },
                         {
-                            title: 'Marutahub',
-                            value: 'marutahub'
+                            title: 'Net Video Girls',
+                            value: 'net-video-girls'
                         },
                         {
-                            title: 'Neonxvip',
-                            value: 'neonxvip'
+                            title: 'Japan HDV',
+                            value: 'japan-hdv'
+                        },
+                        {
+                            title: 'Caribbeancom',
+                            value: 'caribbeancom'
                         },
                         {
                             title: 'Emuyumi Couple',
                             value: 'emuyumi-couple'
-                        },
-                        {
-                            title: 'Venna',
-                            value: 'venna84'
                         },
                         {
                             title: 'Monger In Asia',
@@ -1127,22 +1420,6 @@ WidgetMetadata = {
                             value: 'alljapanesepass'
                         },
                         {
-                            title: 'Indianxworld',
-                            value: 'indianxworld'
-                        },
-                        {
-                            title: 'Golupaa',
-                            value: 'ratanprem009'
-                        },
-                        {
-                            title: 'Riya Bhabhi1',
-                            value: 'riya_bhabhi1'
-                        },
-                        {
-                            title: 'Horny Indian Couple',
-                            value: 'hornyindiancouple'
-                        },
-                        {
                             title: 'AV Stockings',
                             value: 'avstockings'
                         },
@@ -1151,38 +1428,18 @@ WidgetMetadata = {
                             value: 'asians-bondage'
                         },
                         {
-                            title: 'sexworld',
-                            value: 'sexworld72'
-                        },
-                        {
                             title: 'Eagle MILF',
                             value: 'eagle-milf'
                         },
                         {
-                            title: 'Nana69',
-                            value: 'nana01921'
-                        },
-                        {
-                            title: 'Doggy',
-                            value: 'doggy2198'
-                        },
-                        {
-                            title: 'Netuandhubby',
-                            value: 'netu_and_hubby'
-                        },
-                        {
                             title: 'PETERS',
                             value: 'peters-1'
-                        },
-                        {
-                            title: 'Osakaporn',
-                            value: 'osakaporn'
                         }
                     ]
                 },
                 {
                     name: 'page',
-                    title: "页码",
+                    title: "é¡µç ",
                     type: 'page',
                     value: '0'
                 }
@@ -1190,340 +1447,46 @@ WidgetMetadata = {
         },
         {
             id: 'xvideos.pornstars',
-            title: "色情明星",
-            description: "XVideos 色情明星",
+            title: "ææ",
+            description: "XVideos è²æææ",
             functionName: 'getPornstarsList',
             params: [
                 {
                     name: 'pornstar',
-                    title: "色情明星",
+                    title: "è²æææ",
                     type: 'input',
                     placeholders: [
-                        {
-                            title: 'Chicken1806',
-                            value: 'chicken18061'
-                        },
-                        {
-                            title: 'Momoka',
-                            value: 'momoka142'
-                        },
-                        {
-                            title: 'Yui Hatano',
-                            value: 'yui-hatano-1'
-                        },
-                        {
-                            title: 'Rae Lil Black',
-                            value: 'rae-lil-black'
-                        },
-                        {
-                            title: 'Hushixiaolu',
-                            value: 'hushixiaolu2'
-                        },
-                        {
-                            title: 'Monmon Tw',
-                            value: 'monmon_tw1'
-                        },
-                        {
-                            title: 'Emiri Momota',
-                            value: 'emiri-momota'
-                        },
-                        {
-                            title: 'Mao Hamasaki',
-                            value: 'mao-hamasaki'
-                        },
-                        {
-                            title: 'Anri Okita',
-                            value: 'anri-okita'
-                        },
-                        {
-                            title: 'Eimi Fukada',
-                            value: 'eimi-fukada'
-                        },
-                        {
-                            title: 'Ai Li',
-                            value: 'ai-li-model'
-                        },
-                        {
-                            title: 'Azumi Miz',
-                            value: 'azumi-miz'
-                        },
-                        {
-                            title: 'Rei Mizuna',
-                            value: 'rei_mizuna'
-                        },
-                        {
-                            title: 'Suzu Ichinose',
-                            value: 'suzu-ichinose'
-                        },
-                        {
-                            title: 'Yuuri Himeno',
-                            value: 'yuuri-himeno'
-                        },
-                        {
-                            title: 'May Thai',
-                            value: 'may-thai'
-                        },
-                        {
-                            title: 'Cantika',
-                            value: 'cantika259'
-                        },
-                        {
-                            title: 'Aimi Yoshikawa',
-                            value: 'aimi-yoshikawa'
-                        },
-                        {
-                            title: 'Miku Ohashi',
-                            value: 'miku-ohashi-1'
-                        },
-                        {
-                            title: 'Sudipa',
-                            value: 'sudipa20'
-                        },
-                        {
-                            title: 'Timepasserby',
-                            value: 'timepasserby2'
-                        },
-                        {
-                            title: 'Lee Chae Dam',
-                            value: 'lee-chae-dam'
-                        },
-                        {
-                            title: 'Teju',
-                            value: 'teju-model'
-                        },
-                        {
-                            title: "李蓉蓉 Li Rong Rong",
-                            value: 'li-rong-rong'
-                        },
-                        {
-                            title: 'Erika Momotani',
-                            value: 'erika-momotani'
-                        },
-                        {
-                            title: 'Reiko Kobayakawa',
-                            value: 'reiko-kobayakawa'
-                        },
-                        {
-                            title: 'Maki Houjo',
-                            value: 'maki-houjo'
-                        },
-                        {
-                            title: 'Miho Ichiki',
-                            value: 'miho-ichiki-model'
-                        },
-                        {
-                            title: 'Ai Uehara',
-                            value: 'ai-uehara'
-                        },
-                        {
-                            title: 'Maron Natsuki',
-                            value: 'maron-natsuki'
-                        },
-                        {
-                            title: 'Kaori Maeda',
-                            value: 'kaori-maeda'
-                        },
-                        {
-                            title: 'Sangecrot4',
-                            value: 'tika1093'
-                        },
-                        {
-                            title: 'Ai Xi',
-                            value: 'ai-xi'
-                        },
-                        {
-                            title: 'Ranako',
-                            value: 'ranako-model'
-                        },
-                        {
-                            title: 'Iori Kogawa',
-                            value: 'iori-kogawa'
-                        },
-                        {
-                            title: 'Rei Kitajima',
-                            value: 'rei-kitajima-1'
-                        },
-                        {
-                            title: 'Su Chang',
-                            value: 'su-chang-model'
-                        },
-                        {
-                            title: 'Kana Morisawa',
-                            value: 'kana-morisawa'
-                        },
-                        {
-                            title: 'Maria Nagai',
-                            value: 'maria-nagai'
-                        },
-                        {
-                            title: 'Mei Matsumoto',
-                            value: 'mei-matsumoto'
-                        },
-                        {
-                            title: 'Akari Asagiri',
-                            value: 'akari-asagiri'
-                        },
-                        {
-                            title: 'Yuu Shinoda',
-                            value: 'yuu-shinoda'
-                        },
-                        {
-                            title: 'Ren Azumi',
-                            value: 'ren-azumi'
-                        },
-                        {
-                            title: 'Xiao Ye Ye',
-                            value: 'xiao-ye-ye'
-                        },
-                        {
-                            title: 'Mitsuki Akai',
-                            value: 'marie-konishi'
-                        },
-                        {
-                            title: 'Kaede Niiyama',
-                            value: 'kaede-niiyama'
-                        },
-                        {
-                            title: 'Aoi Shirosaki',
-                            value: 'aoi-shirosaki-1'
-                        },
-                        {
-                            title: 'Hitomi Tanaka',
-                            value: 'hitomi-tanaka'
-                        },
-                        {
-                            title: 'Baebi Hel',
-                            value: 'baebi-hel'
-                        },
-                        {
-                            title: 'Hana Haruna',
-                            value: 'haruna-hana'
-                        },
-                        {
-                            title: 'Satomi Suzuki',
-                            value: 'satomi-suzuki'
-                        },
-                        {
-                            title: 'Ruka Kanae',
-                            value: 'ruka-kanae'
-                        },
-                        {
-                            title: 'Li998',
-                            value: 'li998-model'
-                        },
-                        {
-                            title: 'Wudalan',
-                            value: 'wudalan3'
-                        },
-                        {
-                            title: 'Tuna Kimura',
-                            value: 'tsuna-kimura'
-                        },
-                        {
-                            title: 'Misaki',
-                            value: 'misaki467'
-                        },
-                        {
-                            title: 'Julia Boin',
-                            value: 'julia-kyoka'
-                        },
-                        {
-                            title: 'Shathi Khatun',
-                            value: 'shathi-khatun1'
-                        },
-                        {
-                            title: 'Ruri Saijo',
-                            value: 'ruri_saijo_official1'
-                        },
-                        {
-                            title: 'Cherrycat',
-                            value: 'cherrycat-model'
-                        },
-                        {
-                            title: 'Reona Kirishima',
-                            value: 'reona-kirishima'
-                        },
-                        {
-                            title: 'Emiri Suzuhara',
-                            value: 'emiri-suzuhara-1'
-                        },
-                        {
-                            title: 'Yua Mikami',
-                            value: 'yua-mikami'
-                        },
-                        {
-                            title: 'Sisty',
-                            value: 'sisty-model'
-                        },
-                        {
-                            title: 'Rie Tachikawa',
-                            value: 'rie-tachikawa'
-                        },
-                        {
-                            title: 'Momoka Nishina',
-                            value: 'momoka-nishina-1'
-                        },
-                        {
-                            title: 'Una',
-                            value: 'pptw2'
-                        },
-                        {
-                            title: 'Mia Khalifa',
-                            value: 'mia-khalifa-model'
-                        },
-                        {
-                            title: 'Emiri Okazaki',
-                            value: 'emiri-okazaki'
-                        },
-                        {
-                            title: 'Aditi Arya',
-                            value: 'aditi-arya-model'
-                        },
-                        {
-                            title: 'Marina Yuzuki',
-                            value: 'marina-yuzuki'
-                        },
-                        {
-                            title: 'Shen Na Na',
-                            value: 'shen-na-na'
-                        },
-                        {
-                            title: 'Jimmys Model L',
-                            value: 'jimmys-model-l'
-                        },
-                        {
-                            title: 'Maria Ozawa',
-                            value: 'maria-ozawa'
-                        },
-                        {
-                            title: 'Nono',
-                            value: 'nono13884'
-                        },
-                        {
-                            title: 'Sakura Soh',
-                            value: 'sakura-soh-model'
-                        },
-                        {
-                            title: 'Ichika Matsumoto',
-                            value: 'ichika-matsumoto'
-                        },
-                        {
-                            title: 'Xia Qing Zi',
-                            value: 'xia-qing-zi1'
-                        },
-                        {
-                            title: 'Risa Murakami',
-                            value: 'risa-murakami'
-                        },
-                        {
-                            title: 'Radha786',
-                            value: 'radha7862'
-                        }
+                        { title: 'Su Chang', value: 'su-chang-model' },
+                        { title: 'Yui Hatano', value: 'yui-hatano-1' },
+                        { title: 'Sweetie Fox', value: 'sweetie-fox1' },
+                        { title: 'Riley Reid', value: 'riley-reid-1-model' },
+                        { title: 'Anissa Miller', value: 'anissa-miller-model' },
+                        { title: 'Keila Bassi', value: 'keilabassi77-model' },
+                        { title: 'Lana Rhoades', value: 'lana-rhoades' },
+                        { title: 'Hot Pearl', value: 'hot-pearl2' },
+                        { title: 'Leana Lovings', value: 'leana-lovings' },
+                        { title: 'Skye Young', value: 'skye-young2' },
+                        { title: 'Lilibet Saunders', value: 'lilibet-saunders-model' },
+                        { title: 'Shrooms Q', value: 'shrooms-q-model' },
+                        { title: 'Nicole Murkovski', value: 'nicole-murkovski1' },
+                        { title: 'Molly Little', value: 'molly-little' },
+                        { title: 'Melody Marks', value: 'melody-marks' },
+                        { title: 'Emily Willis', value: 'emily-willis' },
+                        { title: 'Gabbie Carter', value: 'gabbie-carter' },
+                        { title: 'Lia Lin', value: 'lia-lin' },
+                        { title: 'Vale Nappi', value: 'vale_nappi3' },
+                        { title: 'Dylann Vox', value: 'dylann-vox' },
+                        { title: 'Stella Cox', value: 'stella-cox' },
+                        { title: 'Eva Elfie', value: 'eva_elfie-model' },
+                        { title: 'Gia Paige', value: 'gia-paige' },
+                        { title: 'Bunny Colby', value: 'bunny-colby' },
+                        { title: 'Ruka Kanae', value: 'ruka-kanae' },
+                        { title: 'Ruka Kanae', value: 'ruka-kanae' }
                     ]
                 },
                 {
                     name: 'page',
-                    title: "页码",
+                    title: "é¡µç ",
                     type: 'page',
                     value: '0'
                 }
@@ -1593,25 +1556,143 @@ async function getNewList(params) {
     });
     return list.filter((item)=>null !== item);
 }
+function parsePage(params) {
+    return params.page ? Number.parseInt(params.page) : 0;
+}
 async function getChannelList(params) {
-    const page = params.page ? Number.parseInt(params.page) : 0;
+    const page = parsePage(params);
     try {
         const resp = await widgetAPI.get(`${BASE_URL}/channels/${params.channel}/videos/best/${page}`);
         const list = resp.videos.map(formatXVideosItem);
         return list;
     } catch (error) {
-        console.error("频道视频加载失败", error);
+        console.error("é¢éè§é¢å è½½å¤±è´¥", error);
         return [];
     }
 }
 async function getPornstarsList(params) {
-    const page = params.page ? Number.parseInt(params.page) : 0;
+    const page = parsePage(params);
     try {
         const resp = await widgetAPI.get(`${BASE_URL}/pornstars/${params.pornstar}/videos/best/${page}`);
         const list = resp.videos.map(formatXVideosItem);
         return list;
     } catch (error) {
-        console.error("色情明星视频加载失败", error);
+        console.error("è²æææè§é¢å è½½å¤±è´¥", error);
+        return [];
+    }
+}
+let cachedBestArchive = '';
+async function getBestArchive() {
+    if (cachedBestArchive) return cachedBestArchive;
+    try {
+        const $ = await widgetAPI.getHtml(`${BASE_URL}/best`);
+        const links = $('a[href^="/best/"]')
+            .toArray()
+            .map((el)=>$(el).attr('href'))
+            .filter(Boolean);
+        const href = links.find((link)=>/^\/best\/\d{4}-\d{2}$/.test(link || '')) || '';
+        cachedBestArchive = href.replace(/^\//, '').replace(/\/$/, '');
+        return cachedBestArchive;
+    } catch (error) {
+        console.error("ç­é¨å½æ¡£è§£æå¤±è´¥", error);
+        return '';
+    }
+}
+async function getBestList(params) {
+    const page = parsePage(params);
+    const archive = params.archive || '';
+    const mode = (params.mode || 'free').toLowerCase();
+    try {
+        let url = `${BASE_URL}/best`;
+        if (archive) {
+            url = mode === 'red' ? `${BASE_URL}/best-of-red/${archive}` : `${BASE_URL}/best/${archive}`;
+            if (page > 0) url += `/${page}`;
+        } else if (page > 0) {
+            const bestArchive = await getBestArchive();
+            if (bestArchive) url = `${BASE_URL}/best/${bestArchive}/${page}`;
+        }
+        const $ = await widgetAPI.getHtml(url);
+        const blocks = $('#content .thumb-block:not(.thumb-ad), .thumb-block:not(.thumb-ad)');
+        const list = Array.from(blocks).map((el)=>{
+            const $el = $(el);
+            const $title = $el.find('.title a').first();
+            let link = $title.attr('href');
+            if (!link) return null;
+            link = formatUrl(link);
+            const backdropPath = $el.find('.thumb img').attr('data-src') || $el.find('.thumb img').attr('src');
+            const title = $title.text().trim();
+            const result = { id: link, type: 'url', mediaType: 'movie', link, title, backdropPath };
+            if (backdropPath) result.previewUrl = generateVideoPreviewUrl(backdropPath);
+            return result;
+        });
+        const filtered = list.filter((item)=>null !== item);
+        if (filtered.length) return filtered;
+        const fallbackLinks = $('a[href^="/video."]').toArray();
+        return fallbackLinks.map((el)=>{
+            const $el = $(el);
+            const link = formatUrl($el.attr('href'));
+            const title = $el.text().trim();
+            if (!link) return null;
+            return {
+                id: link,
+                type: 'url',
+                mediaType: 'movie',
+                link,
+                title: title || link
+            };
+        }).filter((item)=>null !== item);
+    } catch (error) {
+        console.error("ç­é¨è§é¢å è½½å¤±è´¥", error);
+        return [];
+    }
+}
+async function getCategoryList(params) {
+    const page = parsePage(params);
+    try {
+        const categoryPath = params.category || '';
+        const url = categoryPath.startsWith('lang/') || categoryPath.startsWith('gay') || categoryPath.startsWith('shemale')
+            ? `${BASE_URL}/${categoryPath}`
+            : `${BASE_URL}/${categoryPath}`;
+        const finalUrl = page > 0 && categoryPath.startsWith('c/') ? `${url}/${page}` : url;
+        const $ = await widgetAPI.getHtml(finalUrl);
+        const list = Array.from($('#content .thumb-block:not(.thumb-ad)')).map((el)=>{
+            const $el = $(el);
+            const $title = $el.find('.title a');
+            let link = $title.attr('href');
+            if (!link) return null;
+            link = formatUrl(link);
+            const backdropPath = $el.find('.thumb img').attr('data-src');
+            const title = $title.text().trim();
+            const result = { id: link, type: 'url', mediaType: 'movie', link, title, backdropPath };
+            if (backdropPath) result.previewUrl = generateVideoPreviewUrl(backdropPath);
+            return result;
+        });
+        return list.filter((item)=>null !== item);
+    } catch (error) {
+        console.error("åç±»è§é¢å è½½å¤±è´¥", error);
+        return [];
+    }
+}
+async function getTagList(params) {
+    const page = parsePage(params);
+    try {
+        const url = `${BASE_URL}/tags/${params.tag}${page > 0 ? `/${page}` : ''}`;
+        const $ = await widgetAPI.getHtml(url);
+        const list = Array.from($('#content .thumb-block:not(.thumb-ad)')).map((el)=>{
+            const $el = $(el);
+            const $title = $el.find('.title a');
+            let link = $title.attr('href');
+            if (!link) return null;
+            link = formatUrl(link);
+            const backdropPath = $el.find('.thumb img').attr('data-src');
+            const title = $title.text().trim();
+            const result = { id: link, type: 'url', mediaType: 'movie', link, title, backdropPath };
+            if (backdropPath) result.previewUrl = generateVideoPreviewUrl(backdropPath);
+            return result;
+        });
+        return list.filter((item)=>null !== item);
+    } catch (error) {
+        console.error("æ ç­¾è§é¢å è½½å¤±è´¥", error);
         return [];
     }
 }
@@ -1636,7 +1717,7 @@ async function loadDetail(url) {
         const ldJson = $('script[type="application/ld+json"]').text();
         const ldJsonData = JSON.parse(ldJson);
         videoUrl || (videoUrl = ldJsonData.contentUrl);
-        if (!videoUrl) throw new Error("未找到视频资源");
+        if (!videoUrl) throw new Error("æªæ¾å°è§é¢èµæº");
         const result = {
             id: url,
             type: 'detail',
@@ -1660,11 +1741,11 @@ async function loadDetail(url) {
                 result.childItems = videoRelatedList.map(formatXVideosItem);
             }
         } catch (error) {
-            console.error("视频相关视频加载失败", error);
+            console.error("è§é¢ç¸å³è§é¢å è½½å¤±è´¥", error);
         }
         return result;
     } catch (error) {
-        console.error("视频详情加载失败", error);
+        console.error("è§é¢è¯¦æå è½½å¤±è´¥", error);
         return null;
     }
 }
