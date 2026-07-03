@@ -729,15 +729,15 @@ class WidgetAPI {
             const defaultOptions = await this.getDefaultOptions();
             baseOptions = lodash_es_merge(baseOptions, defaultOptions);
         } catch (error) {
-            console.warn("获取默认配置失败，使用基础配置:", error);
+            console.warn("è·åé»è®¤éç½®å¤±è´¥ï¼ä½¿ç¨åºç¡éç½®:", error);
         }
         const finalOptions = lodash_es_merge(baseOptions, options);
         try {
             const resp = await Widget.http.get(url, finalOptions);
-            if (!resp || 200 !== resp.statusCode) throw new Error(`7}2}1}5}: ${(null == resp ? void 0 : resp.statusCode) || "未知错误"}`);
+            if (!resp || 200 !== resp.statusCode) throw new Error(`è¯·æ±å¤±è´¥: ${(null == resp ? void 0 : resp.statusCode) || "æªç¥éè¯¯"}`);
             return resp.data;
         } catch (error) {
-            throw new Error(`1}C}7}2}1}5}: ${error instanceof Error ? error.message : "未知错误"}`);
+            throw new Error(`ç½ç»è¯·æ±å¤±è´¥: ${error instanceof Error ? error.message : "æªç¥éè¯¯"}`);
         }
     }
     async getHtml(url, options) {
@@ -751,197 +751,334 @@ class WidgetAPI {
 }
 const DEFAULT_BASE_URL = 'https://91porn.com';
 const widgetAPI = new WidgetAPI();
+
+const CATEGORY_MAP = {
+    hot: { title: 'å½åæç­', category: 'hot' },
+    ori: { title: 'åå', category: 'ori' },
+    top: { title: 'æ¬ææç­', category: 'top' },
+    top_last: { title: 'ä¸æç­é¨', category: 'top', extra: '&m=-1' },
+    long: { title: '10åéä»¥ä¸', category: 'long' },
+    longer: { title: '20åéä»¥ä¸', category: 'longer' },
+    tf: { title: 'æ¶èæå¤', category: 'tf' },
+    rf: { title: 'æè¿å ç²¾', category: 'rf' },
+    hd: { title: 'é«æ¸', category: 'hd' },
+    md: { title: 'æ¬æè®¨è®º', category: 'md' },
+    mf: { title: 'æ¬ææ¶è', category: 'mf' }
+};
+
 WidgetMetadata = {
-    id: '91porn_int',
+    id: '91porn_makka',
     title: '91Porn',
-    description: '91Porn',
-    version: "0.9.6",
+    author: 'ððð ð ðððð ð ð|EL',
+    description: '91Porn åç±»æµè§ä¸å¨å±æç´¢æ¨¡å',
+    version: '2.0.0',
     requiredVersion: '0.0.1',
-    author: "網路",
-    site: 'https://github.com/baranwang/forward-widget',
-    detailCacheDuration: 1,
+    site: 'https://91porn.com',
+    detailCacheDuration: 60,
     modules: [
         {
-            id: '91porn.list',
-            title: '91Porn',
-            description: '91Porn',
+            id: '91porn.hot',
+            title: 'ç­é¨',
+            description: 'å½åæç­ / æ¬ææç­ / æ¬æè®¨è®º / ä¸æç­é¨ / æè¿å ç²¾',
             cacheDuration: 3600,
             requiresWebView: false,
-            functionName: 'getList',
+            functionName: 'loadHotGroup',
             params: [
+                { name: 'page', title: 'é¡µç ', type: 'page', value: '1' },
                 {
-                    name: 'sort_by',
-                    title: "分类",
-                    description: "分类",
+                    name: 'category',
+                    title: 'åç±»',
                     type: 'enumeration',
-                    value: 'rf',
+                    value: 'hot',
                     enumOptions: [
-                        {
-                            value: 'rf',
-                            title: "最近加精"
-                        },
-                        {
-                            value: 'hot',
-                            title: "当前最热"
-                        },
-                        {
-                            value: 'top',
-                            title: "本月最热"
-                        },
-                        {
-                            value: 'tf',
-                            title: "本月收藏"
-                        },
-                        {
-                            value: 'md',
-                            title: "本月讨论"
-                        },
-                        {
-                            value: 'top&m=-1',
-                            title: "上月最热"
-                        },
-                        {
-                            value: 'ori',
-                            title: "91原创"
-                        },
-                        {
-                            value: 'long',
-                            title: "10分钟以上 "
-                        },
-                        {
-                            value: 'longer',
-                            title: "20分钟以上 "
-                        },
-                        {
-                            value: 'hd',
-                            title: "高清"
-                        },
-                        {
-                            value: 'mf',
-                            title: "收藏最多"
-                        }
+                        { value: 'hot', title: CATEGORY_MAP.hot.title },
+                        { value: 'top', title: CATEGORY_MAP.top.title },
+                        { value: 'md', title: CATEGORY_MAP.md.title },
+                        { value: 'top_last', title: CATEGORY_MAP.top_last.title },
+                        { value: 'rf', title: CATEGORY_MAP.rf.title }
                     ]
-                },
-                {
-                    name: 'page',
-                    title: "页码",
-                    type: 'page',
-                    value: '1'
-                },
-                {
-                    name: 'base_url',
-                    title: "基础 URL",
-                    type: 'input',
-                    value: DEFAULT_BASE_URL
                 }
             ]
+        },
+        {
+            id: '91porn.ori',
+            title: 'åå',
+            description: '91åå',
+            cacheDuration: 3600,
+            requiresWebView: false,
+            functionName: 'loadOri',
+            params: [{ name: 'page', title: 'é¡µç ', type: 'page', value: '1' }]
+        },
+        {
+            id: '91porn.tf',
+            title: 'æ¶è',
+            description: 'æ¬ææ¶è / æ¶èæå¤',
+            cacheDuration: 3600,
+            requiresWebView: false,
+            functionName: 'loadFavoritesGroup',
+            params: [
+                { name: 'page', title: 'é¡µç ', type: 'page', value: '1' },
+                {
+                    name: 'category',
+                    title: 'åç±»',
+                    type: 'enumeration',
+                    value: 'tf',
+                    enumOptions: [
+                        { value: 'mf', title: CATEGORY_MAP.mf.title },
+                        { value: 'tf', title: CATEGORY_MAP.tf.title }
+                    ]
+                }
+            ]
+        },
+        {
+            id: '91porn.long',
+            title: 'é¿è§é¢',
+            description: '10åéä»¥ä¸ / 20åéä»¥ä¸',
+            cacheDuration: 3600,
+            requiresWebView: false,
+            functionName: 'loadLongGroup',
+            params: [
+                { name: 'page', title: 'é¡µç ', type: 'page', value: '1' },
+                {
+                    name: 'category',
+                    title: 'åç±»',
+                    type: 'enumeration',
+                    value: 'long',
+                    enumOptions: [
+                        { value: 'long', title: CATEGORY_MAP.long.title },
+                        { value: 'longer', title: CATEGORY_MAP.longer.title }
+                    ]
+                }
+            ]
+        },
+        {
+            id: '91porn.search',
+            title: 'æç´¢',
+            description: 'å³é®è¯æç´¢',
+            cacheDuration: 3600,
+            requiresWebView: false,
+            functionName: 'searchList',
+            params: [
+                { name: 'keywords', title: 'å³é®è¯', description: 'è¾å¥å³é®è¯è¿è¡æç´¢', type: 'input', value: '' },
+                { name: 'page', title: 'é¡µç ', type: 'page', value: '1' }
+            ]
         }
-    ]
+    ],
+    search: {
+        title: 'å¨å±æç´¢',
+        functionName: 'searchGlobal',
+        params: [
+            { name: 'keyword', title: 'å³é®è¯', description: 'è¾å¥å³é®è¯è¿è¡å¨å±æç´¢', type: 'input', value: '' },
+            { name: 'page', title: 'é¡µç ', type: 'page', value: '1' }
+        ]
+    }
 };
-async function getList(params) {
-    var _params, _params1, _params2;
-    (_params = params).sort_by || (_params.sort_by = 'ori');
-    (_params1 = params).page || (_params1.page = 1);
-    (_params2 = params).base_url || (_params2.base_url = DEFAULT_BASE_URL);
+
+function buildCategoryUrl(category, page = 1, extra = '') {
+    return `${DEFAULT_BASE_URL}/v.php?category=${category}&viewtype=basic${extra}${page > 1 ? `&page=${page}` : ''}`;
+}
+
+function buildSearchUrl(keyword, page = 1) {
+    return `${DEFAULT_BASE_URL}/v.php?viewtype=basic&keywords=${encodeURIComponent(keyword)}${page > 1 ? `&page=${page}` : ''}`;
+}
+
+function parseVideoCards($, options = {}) {
+    return Array.from($('.videos-text-align'))
+        .map((el) => parseVideoCard($(el), options))
+        .filter(Boolean);
+}
+
+function parseVideoCard($el, options = {}) {
+    if ($el.closest('.col-lg-8').length > 0) return null;
+    const link = $el.find('a').attr('href');
+    if (!link) return null;
+    const backdropPath = $el.find('.img-responsive').attr('src');
+    const item = {
+        id: link,
+        type: 'url',
+        mediaType: 'movie',
+        link,
+        title: $el.find('.video-title').text().trim(),
+        backdropPath
+    };
+    if (options.includeImageFields) {
+        item.posterPath = backdropPath || '';
+        item.image = backdropPath || '';
+        item.coverUrl = backdropPath || '';
+    }
+    setCardDuration(item, $el);
+    setCardPreview(item, backdropPath);
+    setCardReleaseDate(item, $el);
+    return item;
+}
+
+function setCardDuration(item, $el) {
     try {
-        const $ = await widgetAPI.getHtml(`${params.base_url}/v.php?category=${params.sort_by}&viewtype=basic&page=${params.page}`);
-        const list = Array.from($('.videos-text-align')).map((el)=>{
-            const $el = $(el);
-            const $parent = $el.closest('.col-lg-8');
-            if ($parent.length > 0) {
-                console.debug("跳过蜜罐");
-                return null;
-            }
-            const link = $el.find('a').attr('href');
-            if (!link) {
-                console.debug("跳过没有链接的元素");
-                return null;
-            }
-            const backdropPath = $el.find('.img-responsive').attr('src');
-            const result = {
-                id: link,
-                type: 'url',
-                mediaType: 'movie',
-                link,
-                title: $el.find('.video-title').text().trim(),
-                backdropPath
-            };
-            try {
-                result.durationText = $el.find('.duration').text().trim();
-            } catch (error) {}
-            try {
-                var _backdropPath_split_pop;
-                const videoID = null == backdropPath ? void 0 : null == (_backdropPath_split_pop = backdropPath.split('/').pop()) ? void 0 : _backdropPath_split_pop.split('.').shift();
-                if (videoID) result.previewUrl = `https://vthumb.killcovid2021.com/thumb/${videoID}.mp4`;
-            } catch (error) {}
-            try {
-                var _addTimeEl_;
-                const addTimeEl = $el.find('.info').filter((_, el)=>$(el).text().includes("添加时间"));
-                const nextSibling = null == (_addTimeEl_ = addTimeEl[0]) ? void 0 : _addTimeEl_.nextSibling;
-                const addTime = nextSibling && 'textContent' in nextSibling ? nextSibling.textContent : void 0;
-                if (addTime && 'string' == typeof addTime) result.releaseDate = addTime.trim();
-            } catch (error) {}
-            return result;
-        });
-        return list.filter((item)=>Boolean(item));
+        item.durationText = $el.find('.duration').text().trim();
+    } catch (error) {}
+}
+
+function setCardPreview(item, backdropPath) {
+    try {
+        var _backdropPath_split_pop;
+        const videoID = null == backdropPath ? void 0 : null == (_backdropPath_split_pop = backdropPath.split('/').pop()) ? void 0 : _backdropPath_split_pop.split('.').shift();
+        if (videoID) item.previewUrl = `https://vthumb.killcovid2021.com/thumb/${videoID}.mp4`;
+    } catch (error) {}
+}
+
+function setCardReleaseDate(item, $el) {
+    try {
+        const addTimeEl = $el.find('.info').filter((_, el)=>$(el).text().includes('æ·»å æ¶é´'));
+        const nextSibling = addTimeEl[0]?.nextSibling;
+        const addTime = nextSibling && 'textContent' in nextSibling ? nextSibling.textContent : void 0;
+        if (addTime && typeof addTime === 'string') item.releaseDate = addTime.trim();
+    } catch (error) {}
+}
+
+async function getList(params = {}) {
+    const page = params.page || 1;
+    const keywords = (params.keywords || '').trim();
+    const sortBy = params.sort_by || 'hot';
+    const baseUrl = params.base_url || DEFAULT_BASE_URL;
+
+    try {
+        const url = keywords ? `${baseUrl}/v.php?viewtype=basic&page=${page}&keywords=${encodeURIComponent(keywords)}` : `${baseUrl}/v.php?category=${sortBy}&viewtype=basic&page=${page}`;
+        const $ = await widgetAPI.getHtml(url);
+        return parseVideoCards($);
     } catch (error) {
-        console.error("视频列表加载失败", error);
+        console.error('è§é¢åè¡¨å è½½å¤±è´¥', error);
         return [];
     }
 }
+
+async function loadCategory(params, categoryKey) {
+    const cfg = CATEGORY_MAP[categoryKey];
+    if (!cfg) return [];
+    const page = params?.page || 1;
+    try {
+        const url = buildCategoryUrl(cfg.category, page, cfg.extra || '');
+        const $ = await widgetAPI.getHtml(url);
+        return parseVideoCards($);
+    } catch (error) {
+        console.error('è§é¢åè¡¨å è½½å¤±è´¥', error);
+        return [];
+    }
+}
+
+function resolveCategoryKey(params, fallback) {
+    return CATEGORY_MAP[params.category] ? params.category : fallback;
+}
+
+async function loadHotGroup(params = {}) {
+    return loadCategory(params, resolveCategoryKey(params, 'hot'));
+}
+
+async function loadFavoritesGroup(params = {}) {
+    return loadCategory(params, resolveCategoryKey(params, 'tf'));
+}
+
+async function loadLongGroup(params = {}) {
+    return loadCategory(params, resolveCategoryKey(params, 'long'));
+}
+
+async function loadOri(params) { return loadCategory(params, 'ori'); }
+async function loadHd(params) { return loadCategory(params, 'hd'); }
+
+async function searchList(params = {}) {
+    const keyword = (params.keywords || '').trim();
+    if (!keyword) return [{ id: 'tip', type: 'text', title: 'è¯·è¾å¥å³é®è¯å¼å§æç´¢' }];
+    return getSearchResults(keyword, params.page || 1);
+}
+
+async function searchGlobal(params = {}) {
+    const keyword = (params.keyword || '').trim();
+    if (!keyword) return [{ id: 'tip', type: 'text', title: 'è¯·è¾å¥å³é®è¯å¼å§å¨å±æç´¢' }];
+    return getSearchResults(keyword, params.page || 1);
+}
+
+async function getSearchResults(keyword, page = 1) {
+    try {
+        const url = buildSearchUrl(keyword, page);
+        const $ = await widgetAPI.getHtml(url);
+        return parseVideoCards($, { includeImageFields: true });
+    } catch (error) {
+        console.error('æç´¢å¤±è´¥', error);
+        return [{ id: 'err', type: 'text', title: 'æç´¢å¤±è´¥', subTitle: error.message }];
+    }
+}
+
+function getDetailTitle($) {
+    return $('#videodetails h4').first().text().trim();
+}
+
+function getVideoUrlAndPlayer($) {
+    const player = $('#player_one');
+    const script = player.find('script').text();
+    const match = script.match(/strencode2\("(.*?)"\)/);
+    const encoded = (match && match[1]) || '';
+    const sourceHtml = decodeURIComponent(encoded);
+    const $source = Widget.html.load(sourceHtml);
+    return { player, videoUrl: $source('source').attr('src') || '' };
+}
+
+function applyDetailMeta($, detail) {
+    try {
+        const duration = $('#useraction').find('.info').filter((_, el)=>$(el).text().includes('æ¶é¿')).find('.video-info-span').text().trim();
+        if (duration) detail.durationText = duration;
+    } catch (error) {}
+
+    try {
+        const releaseDate = $('.title-yakov').eq(0).text().trim();
+        if (releaseDate) detail.releaseDate = releaseDate;
+    } catch (error) {}
+
+    try {
+        const descHtml = $('#v_desc').html();
+        if (descHtml) {
+            detail.description = Widget.html.load(descHtml.replace(/<br\s*\/?>(?:)/g, '\n')).text();
+        }
+    } catch (error) {}
+}
+
+function parseRelatedItem($el) {
+    const link = $el.find('a').attr('href');
+    if (!link) return null;
+    return {
+        id: link,
+        type: 'url',
+        mediaType: 'movie',
+        link,
+        title: $el.find('.video-title').text().trim(),
+        durationText: $el.find('.duration').text().trim(),
+        backdropPath: $el.find('.img-responsive').attr('src')
+    };
+}
+
+function parseRelatedItems($) {
+    return Array.from($('.well')).map((el)=>parseRelatedItem($(el))).filter(Boolean);
+}
+
 async function loadDetail(url) {
     try {
-        var _script_match;
         const $ = await widgetAPI.getHtml(url);
-        const player = $('#player_one');
-        const script = player.find("script").text();
-        const sourceHtml = decodeURIComponent((null == (_script_match = script.match(/strencode2\("(.*?)"\)/)) ? void 0 : _script_match[1]) || '');
-        const $source = Widget.html.load(sourceHtml);
-        const videoUrl = $source('source').attr('src');
-        if (!videoUrl) throw new Error("未找到视频资源");
-        const result = {
+        const { player, videoUrl } = getVideoUrlAndPlayer($);
+        if (!videoUrl) throw new Error('æªæ¾å°è§é¢èµæº');
+
+        const detail = {
             id: url,
             type: 'detail',
             mediaType: 'movie',
             link: url,
-            title: $('#videodetails h4').first().text().trim(),
-            backdropPath: player.attr('poster'),
+            title: getDetailTitle($),
+            backdropPath: player.attr('poster') || '',
             videoUrl
         };
-        try {
-            const duration = $('#useraction').find('.info').filter((_, el)=>$(el).text().includes("时长")).find('.video-info-span').text().trim();
-            if (duration) result.durationText = duration;
-        } catch (error) {}
-        try {
-            const releaseDate = $('.title-yakov').eq(0).text();
-            if (releaseDate) result.releaseDate = releaseDate;
-        } catch (error) {}
-        try {
-            const description = Widget.html.load($('#v_desc').html().replace(/<br\s*\/?>/g, '\n')).text();
-            if (description) result.description = description;
-        } catch (error) {}
-        try {
-            result.childItems = Array.from($('.well')).map((el)=>{
-                const $el = $(el);
-                const link = $el.find('a').attr('href');
-                if (!link) return null;
-                const title = $el.find('.video-title').text().trim();
-                const durationText = $el.find('.duration').text().trim();
-                return {
-                    id: link,
-                    type: 'url',
-                    mediaType: 'movie',
-                    link: link,
-                    title,
-                    durationText,
-                    backdropPath: $el.find('.img-responsive').attr('src')
-                };
-            }).filter((item)=>Boolean(item));
-        } catch (error) {}
-        return result;
+
+        applyDetailMeta($, detail);
+        detail.childItems = parseRelatedItems($);
+        return detail;
     } catch (error) {
-        console.error("视频详情加载失败", error);
+        console.error('è§é¢è¯¦æå è½½å¤±è´¥', error);
         return null;
     }
 }
-;
