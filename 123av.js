@@ -1,13 +1,13 @@
 // ============================================================
 //  123AV — 视频列表、详情、搜索模块
 //  源站: https://123av.com
-//  SSR HTML 解析 + surrit.store API 获取播放地址
+//  SSR HTML 解析 + 123av.com/stream API 获取播放地址
 // ============================================================
 
 WidgetMetadata = {
   id: "forward.123av",
   title: "123AV",
-  version: "1.0.0",
+  version: "1.0.1",
   requiredVersion: "0.0.1",
   description: "123AV 日本 AV 在线观看模块。支持最新 / 热门 / 有码 / 无码 / 无码流出分类浏览，35 万+ 影片。",
   author: "EL",
@@ -134,7 +134,7 @@ WidgetMetadata = {
 //  常量
 // ============================================================
 const BASE = "https://123av.com";
-const SURRIT = "https://surrit.store";
+
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15";
 const HEADERS = {
   "User-Agent": UA,
@@ -351,18 +351,18 @@ async function searchVideos(params) {
 }
 
 // ============================================================
-//  getPlayableUrl — 通过 surrit.store API 获取视频播放地址
+//  getPlayableUrl — 通过 123av.com/stream API 获取视频播放地址
 // ============================================================
 
 async function getPlayableUrl(surritCode) {
   try {
     if (!surritCode) return "";
 
-    var apiUrl = SURRIT + "/stream?id=" + encodeURIComponent(surritCode);
+    var apiUrl = BASE + "/stream?id=" + encodeURIComponent(surritCode);
     var resp = await Widget.http.get(apiUrl, {
       headers: {
         "User-Agent": UA,
-        "Referer": SURRIT + "/e/" + surritCode
+        "Referer": BASE + "/e/" + surritCode
       }
     });
 
@@ -483,7 +483,7 @@ async function loadDetail(link) {
     var playHeaders = {};
     if (videoUrl) {
       playHeaders = {
-        "Referer": SURRIT + "/",
+        "Referer": BASE + "/",
         "User-Agent": UA
       };
     }
